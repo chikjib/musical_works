@@ -8,7 +8,8 @@ import numpy as np
 
 ALREADY_LOADED_ERROR_MESSAGE = """
 If you need to reload the music works meta data from the CSV file,
-first truncate the table in the database.
+first truncate the table in the Postgres database or destroy the database.
+
 Then, run `python manage.py migrate` for a new empty
 database with tables"""
 
@@ -30,7 +31,7 @@ class Command(BaseCommand):
 
         # Code to load the data into database
         
-        # ANOTHER SOLUTION
+        # Read csv file using Pandas
         dbframe = pd.read_csv(csv_file,encoding='utf-8')
         
         dbframe['contributors'] = dbframe.groupby(['title'])['contributors'].transform(lambda x :  '|'.join(x))
@@ -38,17 +39,20 @@ class Command(BaseCommand):
         dpn = dbframe.dropna()
         dp = dpn.drop_duplicates(subset="contributors")
         # print(dp)
+        
         df = dp['contributors'].str.split("|")
         dpdf = df.drop_duplicates()
+        
         # print(dpdf['contributors'])
         joined_contr= dpdf.str.join("|")
         dtitle = dp['title']
         diswc = dp['iswc']
         dfinal = pd.concat([dtitle,joined_contr,diswc],axis=1)
-        print(dfinal)
+        # print(dfinal)
         
         for dbframef in dfinal.itertuples():
             
+            # Insert into the database
             obj = Work_Metadata.objects.create(title=dbframef.title,contributors=dbframef.contributors,iswc=dbframef.iswc)
             print(type(obj))
             obj.save()
