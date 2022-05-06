@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+{% block content %}
+<div class ="shadow-lg container">
+<form method ="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="x-panel">
+                <div class="x-title">
+                    <h2>Excel Data Upload</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-md-8 col-sm-12 col-xs-12 form-group">
+                        <label>
+
+                        </label>
+                    </div>
+                    <div class='form-group'>
+                    <input type="file" name="music_data" class="form-control">
+                    </div>
+                    <div class="form-group">
+                    <button type="submit" class="btn btn-success">Upload</button>
+                    </div>
+                    {% if messages %}
+					  {% for message in messages %}
+						{% if message.tags == 'warning' %} 
+						  <p class="alert alert-danger">{{ message }}</p>
+						  {% elif message.tags == 'success' %}
+						  <p class="alert alert-success">{{ message }}</p>
+						{% endif %}
+					  {% endfor %}
+					  
+					  {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-md-6 col-xs-12">
+    <table class='table table-responsive'>
+        <thead>
+            <tr>
+            <th>S/N</th>
+           <th>Title</th>
+           <th>Contributors</th>
+           <th>ISWC</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in retr_obj %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ obj.title }}</td>
+                <td>{{ obj.contributors }}</td>
+                <td>{{ obj.iswc }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% endblock %}
+
