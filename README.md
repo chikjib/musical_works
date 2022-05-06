@@ -31,3 +31,25 @@ You should get the message: "Data loaded Successfully"
 2. To access the api view; run python manage.py runserver 
 3. Go to your browser and type in http://localhost:8000/api/
 4. To access a single record by ISWC number use: http://localhost:8000/api/{ISWC}
+
+## PART 1 QUESTIONS
+1. Describe briefly the matching and reconciling method chosen.
+
+#### ANSWER 1
+I used pandas to analyse the data, by taking a union of repeated contributors by title and then removing duplicates, using drop_duplicates(), before adding the reconciled records to the database.
+
+
+2. We constantly receive metadata from our providers, how would
+you automatize the process?
+
+#### ANSWER 2
+I will have to write a scripts, that will append the data to the previous csv works_metadata.csv file which will in turn append the rest of the data to the database, or better still remove the records there and replace with an updated works_metadata.csv records.
+
+## PART 2 QUESTIONS
+1. Imagine that the Single View has 20 million musical works, do
+you think your solution would have a similar response time?
+
+### ANSWER 1:
+Yes, because the response is in json and its just a single query lookup in the lookup viewset and am not using a Filter which would have been filtering every single data which is costly.
+
+2. If not, what would you do to improve it?
